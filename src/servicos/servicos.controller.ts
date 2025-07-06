@@ -9,7 +9,7 @@ export class ServicosController {
 
   @Post()
   create(@Body() createServicoDto: CreateServicoDto) {
-    return this.servicosService.create(createServicoDto);
+    return this.servicosService.create(createServicoDto); 
   }
 
   @Get()
