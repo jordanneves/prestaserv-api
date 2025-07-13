@@ -22,9 +22,9 @@ export class UsuariosService {
   async create(createUsuarioDto: CreateUsuarioDto) {
     const { servicosRelacionados, cpf, email, senha, ...rest } = createUsuarioDto;
     // Validação de CPF/CNPJ
-    if (!validarCpfCnpj(cpf)) {
+    /*if (!validarCpfCnpj(cpf)) {
       throw new BadRequestException('CPF ou CNPJ inválido.');
-    }
+    }*/
     // Verificar duplicidade de CPF/CNPJ
     const usuarioExistente = await this.usuarioRepository.findOneBy({ cpf });
     if (usuarioExistente) {

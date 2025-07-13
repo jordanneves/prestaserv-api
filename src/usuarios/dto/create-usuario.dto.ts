@@ -8,3 +8,4 @@ export class CreateUsuarioDto {
   tipo: 'cliente' | 'fornecedor';
   servicosRelacionados?: number[];
 }
+6
