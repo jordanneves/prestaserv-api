@@ -65,4 +65,32 @@ export class ContratosService {
     contrato.dataConclusao = avaliarDto.dataConclusao;
     return this.contratoRepository.save(contrato);
   }
+  async listarPorCliente(clienteId: number) {
+    return this.contratoRepository.find({
+      where: { cliente: {id: clienteId}},
+      relations: ['servico'],
+      order: { id: 'DESC' },
+    });
+  }
+  async listarPorFornecedor(fornecedorId: number) {
+    return this.contratoRepository.find({
+      where: { fornecedor: {id: fornecedorId}},
+      relations: ['servico'],
+      order: { id: 'DESC' },
+    });
+  }
+  async encerrar(id: number) {
+    const contrato = await this.contratoRepository.findOneBy({ id });
+
+    if (!contrato) {
+      throw new NotFoundException('Contrato não encontrado.');
+    }
+
+    if (contrato.dataConclusao) {
+      throw new BadRequestException('Contrato já está encerrado.');
+    }
+
+    contrato.dataConclusao = new Date().toISOString().split('T')[0];
+    return this.contratoRepository.save(contrato);
+  }
 }
