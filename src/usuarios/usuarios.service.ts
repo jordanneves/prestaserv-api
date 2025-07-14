@@ -20,7 +20,7 @@ export class UsuariosService {
   ) {}
 
   async create(createUsuarioDto: CreateUsuarioDto) {
-    const { servicosRelacionados, cpf, email, senha, ...rest } = createUsuarioDto;
+    const { cpf, email, senha, ...rest } = createUsuarioDto;
     // Validação de CPF/CNPJ
     /*if (!validarCpfCnpj(cpf)) {
       throw new BadRequestException('CPF ou CNPJ inválido.');
@@ -40,23 +40,19 @@ export class UsuariosService {
     }
     const senhaHash = await bcrypt.hash(senha, 10);
     const usuario = this.usuarioRepository.create({ cpf, email, senha: senhaHash, ...rest });
-    if (servicosRelacionados && servicosRelacionados.length > 0) {
-      const servicos = await this.servicoRepository.findByIds(servicosRelacionados);
-      usuario.servicosRelacionados = servicos;
-    }
     return this.usuarioRepository.save(usuario);
   }
 
   findAll() {
     return this.usuarioRepository.find({
-      relations: ['servicosRelacionados'],
+      relations: ['usuarioServicos', 'usuarioServicos.servico'],
     });
   }
 
   findOne(id: number) {
     return this.usuarioRepository.findOne({
       where: { id },
-      relations: ['servicosRelacionados'],
+      relations: ['usuarioServicos', 'usuarioServicos.servico'],
     });
   }
 

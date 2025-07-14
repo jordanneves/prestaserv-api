@@ -5,12 +5,14 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 
 @Controller('usuarios')
 export class UsuariosController {
-  constructor(private readonly usuariosService: UsuariosService) {}
+  constructor(
+    private readonly usuariosService: UsuariosService,
+  ) {}
 
-@Post('login')
-login(@Body() body: { email: string; senha: string }) {
-  return this.usuariosService.login(body.email, body.senha);
-}
+  @Post('login')
+  login(@Body() body: { email: string; senha: string }) {
+    return this.usuariosService.login(body.email, body.senha);
+  }
 
   @Post()
   create(@Body() createUsuarioDto: CreateUsuarioDto) {
@@ -40,4 +42,5 @@ login(@Body() body: { email: string; senha: string }) {
   remove(@Param('id') id: string) {
     return this.usuariosService.remove(Number(id));
   }
+  
 }

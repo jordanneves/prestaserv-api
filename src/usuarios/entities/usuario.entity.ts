@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToMany } from 'typeorm';
 import { Servico } from '../../servicos/entities/servico.entity';
 import { Contrato } from '../../contratos/entities/contrato.entity';
+import { UsuarioServico } from '../../usuarios-servicos/usuario-servico.entity';
 
 @Entity()
 export class Usuario {
@@ -28,12 +29,12 @@ export class Usuario {
   @Column({ select: false })
   senha: string;
 
-  @ManyToMany(() => Servico, servico => servico.usuarios)
-  servicosRelacionados: Servico[];
-
   @OneToMany(() => Contrato, contrato => contrato.cliente)
   contratosCliente: Contrato[];
 
   @OneToMany(() => Contrato, contrato => contrato.fornecedor)
   contratosFornecedor: Contrato[];
+
+  @OneToMany(() => UsuarioServico, usuarioServico => usuarioServico.usuario)
+  usuarioServicos: UsuarioServico[];
 }

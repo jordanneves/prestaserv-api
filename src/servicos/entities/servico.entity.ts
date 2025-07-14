@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { Usuario } from '../../usuarios/entities/usuario.entity';
+import { UsuarioServico } from '../../usuarios-servicos/usuario-servico.entity';
 
 @Entity()
 export class Servico {
@@ -18,7 +19,6 @@ export class Servico {
   @Column({ type: 'text', nullable: true })
   mensagem: string;
 
-  @ManyToMany(() => Usuario, usuario => usuario.servicosRelacionados)
-  @JoinTable()
-  usuarios: Usuario[];
+  @OneToMany(() => UsuarioServico, usuarioServico => usuarioServico.servico)
+  usuarioServicos: UsuarioServico[];
 }
