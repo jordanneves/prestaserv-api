@@ -1,13 +1,43 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { UsuariosService } from './usuarios/usuarios.service';
 import { DataSource } from 'typeorm';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe()); // opcional, mas recomendado
+  app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
+
+  // Configuração do Swagger
+  const config = new DocumentBuilder()
+    .setTitle('PrestaServ API')
+    .setDescription('API para gerenciamento de serviços de prestação, conectando clientes e fornecedores através de contratos.')
+    .setVersion('1.0.0')
+    .addTag('usuarios', 'Operações relacionadas aos usuários')
+    .addTag('servicos', 'Operações relacionadas aos serviços')
+    .addTag('contratos', 'Operações relacionadas aos contratos')
+    .addTag('usuarios-servicos', 'Relacionamentos entre usuários e serviços')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
+      'JWT-auth',
+    )
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/docs', app, document, {
+    customSiteTitle: 'PrestaServ API Documentation',
+    customCss: `
+      .swagger-ui .topbar { display: none }
+      .swagger-ui .info .title { color: #2A7BD2 }
+    `,
+  });
+
   const usuariosService = app.get(UsuariosService);
   // Wait for TypeORM DataSource to be initialized so tables/entities are ready
   try {
@@ -31,6 +61,8 @@ async function bootstrap() {
       console.error('Failed to create admin user during seed:', err?.message || err);
     }
   }*/
+
   await app.listen(process.env.PORT ?? 3000);
+  console.log(`📚 Documentação da API disponível em: http://localhost:${process.env.PORT ?? 3000}/api/docs`);
 }
 bootstrap();
