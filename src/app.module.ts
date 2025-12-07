@@ -20,8 +20,11 @@ import { UsuariosServicosModule } from './usuarios-servicos/usuarios-servicos.mo
     password: process.env.DATABASE_URL ? undefined : (process.env.POSTGRES_PASSWORD || 'postgres'),
     database: process.env.DATABASE_URL ? undefined : (process.env.POSTGRES_DB || 'prestaserv_db'),
     autoLoadEntities: true,
-    // In production prefer migrations; enable synchronize only when explicitly set or not in production
-    synchronize: (process.env.TYPEORM_SYNCHRONIZE === 'true') || (process.env.NODE_ENV !== 'production'),
+    // Force synchronize in development or when explicitly enabled
+    // For production deployments, set TYPEORM_SYNCHRONIZE=true to create tables
+    synchronize: process.env.TYPEORM_SYNCHRONIZE === 'true' || process.env.NODE_ENV !== 'production',
+    // Add detailed logging to help debug entity loading and table creation
+    logging: process.env.NODE_ENV !== 'production' ? ['query', 'error', 'schema'] : ['error', 'schema'],
     // Enable SSL when using DATABASE_URL (Render) or when DB_SSL=true
     // Render and most managed PostgreSQL providers require SSL
     ssl: process.env.DATABASE_URL

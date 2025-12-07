@@ -39,13 +39,28 @@ async function bootstrap() {
   });
 
   const usuariosService = app.get(UsuariosService);
+  
+  // Log database configuration for debugging
+  console.log('Environment variables:');
+  console.log('NODE_ENV:', process.env.NODE_ENV);
+  console.log('DATABASE_URL present:', !!process.env.DATABASE_URL);
+  console.log('TYPEORM_SYNCHRONIZE:', process.env.TYPEORM_SYNCHRONIZE);
+  
   // Wait for TypeORM DataSource to be initialized so tables/entities are ready
   try {
     const dataSource = app.get(DataSource);
+    console.log('DataSource isInitialized:', dataSource?.isInitialized);
+    console.log('DataSource options synchronize:', dataSource?.options?.synchronize);
+    
     if (dataSource && !dataSource.isInitialized) {
       console.log('Initializing database connection before running seeds...');
       await dataSource.initialize();
       console.log('Database initialized.');
+    }
+    
+    // Log loaded entities
+    if (dataSource?.entityMetadatas) {
+      console.log('Loaded entities:', dataSource.entityMetadatas.map(em => em.name));
     }
   } catch (err) {
     // If we can't get the DataSource from DI, log and continue — TypeORM may already be initialized.
