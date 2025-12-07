@@ -22,7 +22,7 @@ async function bootstrap() {
     console.warn('Warning: could not initialize DataSource before seeding:', err?.message || err);
   }
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@prestaserv.com';
-  const adminExists = await usuariosService.findByEmail?.(adminEmail);
+  /*const adminExists = await usuariosService.findByEmail?.(adminEmail);
   if (!adminExists && (process.env.SEED_ADMIN === 'true')) {
     try {
       await usuariosService.create({ nome: 'Admin', email: adminEmail, senha: '123456', tipo: 'admin', cpf: '00000000000', telefone:'', endereco:'' });
@@ -30,7 +30,7 @@ async function bootstrap() {
     } catch (err) {
       console.error('Failed to create admin user during seed:', err?.message || err);
     }
-  }
+  }*/
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
