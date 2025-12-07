@@ -5,7 +5,7 @@ export class CreateUsuarioDto {
   endereco: string;
   email: string;
   senha: string;
-  tipo: 'cliente' | 'fornecedor';
+  tipo: 'cliente' | 'fornecedor' | 'admin';
   servicosRelacionados?: number[];
 }
 6

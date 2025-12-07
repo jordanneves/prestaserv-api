@@ -1,10 +1,12 @@
-import { Controller, Post, Body, Get, Query, BadRequestException } from '@nestjs/common';
+import { Controller, Post, Body, Get, Query, BadRequestException, UseGuards } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsuarioServico } from './usuario-servico.entity';
 import { Usuario } from '../usuarios/entities/usuario.entity';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('usuarios-servicos')
+@UseGuards(JwtAuthGuard)
 export class UsuariosServicosController {
   constructor(
     @InjectRepository(UsuarioServico)

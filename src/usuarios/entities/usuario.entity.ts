@@ -20,8 +20,8 @@ export class Usuario {
   @Column()
   endereco: string;
 
-  @Column({ type: 'enum', enum: ['cliente', 'fornecedor'] })
-  tipo: 'cliente' | 'fornecedor';
+  @Column({ type: 'enum', enum: ['cliente', 'fornecedor', 'admin'] })
+  tipo: 'cliente' | 'fornecedor' | 'admin';
 
   @Column({ unique: true })
   email: string;
