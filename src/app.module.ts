@@ -22,12 +22,11 @@ import { UsuariosServicosModule } from './usuarios-servicos/usuarios-servicos.mo
     autoLoadEntities: true,
     // In production prefer migrations; enable synchronize only when explicitly set or not in production
     synchronize: (process.env.TYPEORM_SYNCHRONIZE === 'true') || (process.env.NODE_ENV !== 'production'),
-    // Enable SSL when requested (many managed Postgres providers require SSL).
-    // Use DB_SSL=true in the environment to force SSL. For typical managed DBs (Render),
-    // we set rejectUnauthorized: false to allow connection without custom CA.
-    ssl: (process.env.DB_SSL === 'true' || (process.env.DATABASE_URL && process.env.NODE_ENV === 'production'))
+    // Enable SSL when using DATABASE_URL (Render) or when DB_SSL=true
+    // Render and most managed PostgreSQL providers require SSL
+    ssl: process.env.DATABASE_URL
       ? { rejectUnauthorized: false }
-      : false,
+      : (process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false),
   }),
   ServicosModule,
   UsuariosModule,
