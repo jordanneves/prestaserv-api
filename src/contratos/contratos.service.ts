@@ -68,14 +68,14 @@ export class ContratosService {
   async listarPorCliente(clienteId: number) {
     return this.contratoRepository.find({
       where: { cliente: {id: clienteId}},
-      relations: ['servico'],
+      relations: ['servico', 'cliente', 'fornecedor'],
       order: { id: 'DESC' },
     });
   }
   async listarPorFornecedor(fornecedorId: number) {
     return this.contratoRepository.find({
       where: { fornecedor: {id: fornecedorId}},
-      relations: ['servico'],
+      relations: ['servico', 'cliente', 'fornecedor'],
       order: { id: 'DESC' },
     });
   }
